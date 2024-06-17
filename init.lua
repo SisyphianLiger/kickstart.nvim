@@ -536,7 +536,7 @@ require('lazy').setup({
     },
     config = function()
       -- Brief aside: **What is LSP?**
-      --
+
       -- LSP is an initialism you've probably heard, but might not understand what it is.
       --
       -- LSP stands for Language Server Protocol. It's a protocol that helps editors
@@ -675,13 +675,11 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        clangd = {
-          cmd = { '/usr/bin/clangd' },
-        },
         gopls = {},
         pyright = {},
         rust_analyzer = {},
         tsserver = {},
+
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         -- Some languages (like typescript) have entire language plugins that can be useful:
         --    https://github.com/pmizio/typescript-tools.nvim
@@ -712,10 +710,9 @@ require('lazy').setup({
       --
       --  You can press `g?` for help in this menu.
       require('mason').setup()
-
       -- You can add other tools here that you want Mason to install
       -- for you, so that they are available from within Neovim.
-      local ensure_installed = vim.tbl_keys(servers or { 'rust_analyzer', 'lua_ls', 'clangd', 'asm_lsp', 'Ocamllsp', 'pyre' })
+      local ensure_installed = vim.tbl_keys(servers or { 'rust_analyzer', 'lua_ls', 'asm_lsp', 'Ocamllsp', 'pyre' })
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
       })
@@ -724,7 +721,7 @@ require('lazy').setup({
       require('mason-lspconfig').setup {
         handlers = {
           function(server_name)
-            local server = servers[server_name] or { 'rust_analyzer', 'lua_ls', 'clangd', 'asm_lsp', 'Ocamllsp', 'pyre' }
+            local server = servers[server_name] or { 'rust_analyzer', 'lua_ls', 'asm_lsp', 'Ocamllsp', 'pyre' }
             -- This handles overriding only values explicitly passed
             -- by the server configuration above. Useful when disabling
             -- certain features of an LSP (for example, turning off formatting for tsserver)
@@ -770,6 +767,13 @@ require('lazy').setup({
         -- is found.
         -- javascript = { { "prettierd", "prettier" } },
       },
+    },
+  },
+
+  -- lspconfig for clangd
+  {
+    require('lspconfig').clangd.setup {
+      cmd = { '/usr/bin/clangd' },
     },
   },
 
